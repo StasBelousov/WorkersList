@@ -14,26 +14,28 @@ class MainViewController: UIViewController {
     lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
-//        tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 44
         tableView.delegate = self
         tableView.dataSource = self
         tableView.registerCell(cellClass: WorkerTableViewCell.self)
         tableView.register(WorkerTableViewCell.self, forCellReuseIdentifier: self.cellId)
-        
+        tableView.separatorStyle = .none
         return tableView
     }()
     
-    private var workers =  [Item]()
+    private var workers = [Item]()
+    private let imageService = ImageService()
     private var loadingAccess = true
 
     override func viewDidLoad() {
         super.viewDidLoad()
         fetchWorkers()
         view.backgroundColor = .red
+        
+        
         view.addSubview(tableView)
         
         NSLayoutConstraint.activate([
+            
             tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
             tableView.topAnchor.constraint(equalTo: self.view.topAnchor),
             tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
@@ -75,11 +77,28 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! WorkerTableViewCell
         let cellData = workers[indexPath.row]
         
+        DispatchQueue.main.async {
+            if let urlString = cellData.avatarURL {
+                self.imageService.download(at: urlString) { image in
+                    guard let avatar = image else { return }
+                    cell.cornerRadius(image: avatar)
+                    cell.imageView?.layer.cornerRadius = 36
+                }
+            }
+        }
+       
+        
         cell.workerName.text = cellData.firstName
+        cell.workerPosition.text = cellData.position
+        cell.selectionStyle = .none
+        cell.imageView?.layer.cornerRadius = 36
         
 //        let cell = tableView.dequeue(cellClass: WorkerTableViewCell.self, forIndexPath: indexPath)
         return cell
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 78
+    }
     
 }

@@ -20,6 +20,7 @@
 		19B893BA272F259D000825E1 /* UITableViewCell+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19B893B9272F259D000825E1 /* UITableViewCell+Extension.swift */; };
 		19B893BB272F314C000825E1 /* WorkerTableViewCell.swift in Resources */ = {isa = PBXBuildFile; fileRef = 19B893B4272F2377000825E1 /* WorkerTableViewCell.swift */; };
 		19B893BD272F47C5000825E1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19B893BC272F47C5000825E1 /* SceneDelegate.swift */; };
+		19CBED3C27383B1D0015DA7F /* TapBarCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19CBED3B27383B1D0015DA7F /* TapBarCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +38,7 @@
 		19B893B6272F254B000825E1 /* UITableView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Extension.swift"; sourceTree = "<group>"; };
 		19B893B9272F259D000825E1 /* UITableViewCell+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableViewCell+Extension.swift"; sourceTree = "<group>"; };
 		19B893BC272F47C5000825E1 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		19CBED3B27383B1D0015DA7F /* TapBarCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapBarCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +88,7 @@
 				1929A75427306F3C00CB11C6 /* Main.storyboard */,
 				194A420B272DBEA300A6CD98 /* MainViewController.swift */,
 				19B893B4272F2377000825E1 /* WorkerTableViewCell.swift */,
+				19CBED3B27383B1D0015DA7F /* TapBarCollectionViewCell.swift */,
 			);
 			path = PresentationLayer;
 			sourceTree = "<group>";
@@ -213,6 +216,7 @@
 				19B893BA272F259D000825E1 /* UITableViewCell+Extension.swift in Sources */,
 				19B893B5272F2377000825E1 /* WorkerTableViewCell.swift in Sources */,
 				19B893B3272F1EBD000825E1 /* ImageService.swift in Sources */,
+				19CBED3C27383B1D0015DA7F /* TapBarCollectionViewCell.swift in Sources */,
 				19B893B7272F254B000825E1 /* UITableView+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

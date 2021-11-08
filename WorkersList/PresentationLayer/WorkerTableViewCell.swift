@@ -12,30 +12,31 @@ class WorkerTableViewCell: UITableViewCell {
     let workerImage: UIImageView = {
         var image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
-        //image.image = UIImage(named: "default_logo.png")
+        image.image = UIImage(named: "default_logo.png")
         image.layer.cornerRadius = image.frame.height / 2
         image.contentMode = .scaleAspectFit
+        image.clipsToBounds = true
         return image
     }()
     
     let workerName: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 16)
-        label.textColor = UIColor.black
+        label.textColor = UIColor(red: 0.02, green: 0.02, blue: 0.063, alpha: 1)
+        label.font = UIFont(name: "Inter-Medium", size: 16)
         return label
     }()
     
     let workerPosition: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 13)
-        label.textColor = UIColor.lightGray
+        label.textColor = UIColor(red: 0.333, green: 0.333, blue: 0.361, alpha: 1)
+        label.font = UIFont(name: "Inter-Regular", size: 13)
         return label
     }()
     
     let infoStackView: UIStackView = {
-       let stack = UIStackView()
+        let stack = UIStackView()
         stack.translatesAutoresizingMaskIntoConstraints = false
         stack.axis = .vertical
         stack.spacing = 3
@@ -49,16 +50,16 @@ class WorkerTableViewCell: UITableViewCell {
         infoStackView.addArrangedSubview(workerPosition)
         contentView.addSubview(infoStackView)
         contentView.addSubview(workerImage)
-        imageView?.layer.cornerRadius = 15
+        self.selectionStyle = .none
         
         NSLayoutConstraint.activate([
             workerImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             workerImage.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -3),
             workerImage.trailingAnchor.constraint(equalTo: infoStackView.leadingAnchor, constant: -16),
-            workerImage.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 3),
+            workerImage.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 6),
             workerImage.heightAnchor.constraint(equalToConstant: 72),
             workerImage.widthAnchor.constraint(equalToConstant: 72),
-    
+            
             infoStackView.heightAnchor.constraint(equalToConstant: 45),
             infoStackView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
@@ -74,9 +75,16 @@ class WorkerTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    func cornerRadius(image: UIImage) {
-        self.imageView?.image = image
-        self.imageView?.layer.cornerRadius = 15
+    func setImage(image: UIImage) {
+        workerImage.image = image
+        workerImage.clipsToBounds = true
+        workerImage.layer.cornerRadius = workerImage.frame.height / 2
+        
+    }
+    
+    func setData(cellData: Item) {
+        workerName.text = cellData.firstName
+        workerPosition.text = cellData.department
     }
     
 }

@@ -9,15 +9,34 @@ import UIKit
 
 class MainViewController: UIViewController {
     
-    private let cellId = "cellId"
-
+    private enum Constants {
+        static let tableViewCell = "cellId"
+        static let collectionViewCell = "CollectionViewCell"
+        
+    }
+    
+    let testArray = ["ALL", "iOS", "Android", "Admin", "Bob", "ALL", "iOS", "Android", "Admin", "Bob"]
+    
+    let collectionview: UICollectionView = {
+        let collection = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout.init())
+        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout.init()
+        layout.scrollDirection = UICollectionView.ScrollDirection.horizontal
+        collection.setCollectionViewLayout(layout, animated: true)
+        collection.translatesAutoresizingMaskIntoConstraints = false
+        collection.register(TapBarCollectionViewCell.self, forCellWithReuseIdentifier: Constants.collectionViewCell)
+        collection.showsVerticalScrollIndicator = false
+        collection.showsHorizontalScrollIndicator = false
+        collection.backgroundColor = UIColor.white
+        return collection
+    }()
+    
     lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.delegate = self
         tableView.dataSource = self
         tableView.registerCell(cellClass: WorkerTableViewCell.self)
-        tableView.register(WorkerTableViewCell.self, forCellReuseIdentifier: self.cellId)
+        tableView.register(WorkerTableViewCell.self, forCellReuseIdentifier: Constants.tableViewCell)
         tableView.separatorStyle = .none
         return tableView
     }()
@@ -25,19 +44,30 @@ class MainViewController: UIViewController {
     private var workers = [Item]()
     private let imageService = ImageService()
     private var loadingAccess = true
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         fetchWorkers()
-        view.backgroundColor = .red
+        collectionview.delegate = self
+        collectionview.dataSource = self
         
-        
+        view.addSubview(collectionview)
         view.addSubview(tableView)
+        view.backgroundColor = .white
+        
+        let safeLayoutGuide = self.view.safeAreaLayoutGuide
         
         NSLayoutConstraint.activate([
             
+            // Constrain the container view to the view controller
+            collectionview.topAnchor.constraint(equalTo: safeLayoutGuide.topAnchor),
+            collectionview.leadingAnchor.constraint(equalTo: safeLayoutGuide.leadingAnchor, constant: 16),
+            collectionview.widthAnchor.constraint(equalTo: safeLayoutGuide.widthAnchor),
+            collectionview.heightAnchor.constraint(equalToConstant: 36),
+            
+            //Constrain the tableview to the view controller
             tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            tableView.topAnchor.constraint(equalTo: self.view.topAnchor),
+            tableView.topAnchor.constraint(equalTo: self.collectionview.bottomAnchor),
             tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
             
@@ -64,9 +94,10 @@ class MainViewController: UIViewController {
             }
         }
     }
-
+    
 }
 
+//MARK: UITableViewDelegate, UITableViewDataSource
 extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -74,31 +105,70 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! WorkerTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.tableViewCell, for: indexPath) as! WorkerTableViewCell
         let cellData = workers[indexPath.row]
         
-        DispatchQueue.main.async {
-            if let urlString = cellData.avatarURL {
-                self.imageService.download(at: urlString) { image in
-                    guard let avatar = image else { return }
-                    cell.cornerRadius(image: avatar)
-                    cell.imageView?.layer.cornerRadius = 36
-                }
+        if let urlString = cellData.avatarURL {
+            self.imageService.download(at: urlString) { image in
+                guard let avatar = image else { return }
+                cell.setImage(image: avatar)
             }
         }
-       
         
-        cell.workerName.text = cellData.firstName
-        cell.workerPosition.text = cellData.position
-        cell.selectionStyle = .none
-        cell.imageView?.layer.cornerRadius = 36
-        
-//        let cell = tableView.dequeue(cellClass: WorkerTableViewCell.self, forIndexPath: indexPath)
+        cell.setData(cellData: cellData)
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 78
+        return 80
+    }
+    
+}
+
+//MARK: UICollectionViewDelegate, UICollectionViewDataSource
+extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView
+                .dequeueReusableCell(withReuseIdentifier: Constants.collectionViewCell, for: indexPath) as? TapBarCollectionViewCell else {
+            fatalError("Collection View Cell class not found.")
+        }
+        cell.setUp(text: testArray[indexPath.row])
+        if indexPath.row == 0 {
+            cell.isSelected = true
+        }
+        
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return testArray.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+        collectionView.setNeedsLayout()
+    }
+    
+}
+
+//MARK: UICollectionViewDelegateFlowLayout
+extension MainViewController: UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        // Add more space left and right the tab
+        let addSpace: CGFloat = 20
+        let tabTitle = testArray[indexPath.row]
+        let tabSize = CGSize(width: 500, height: collectionview.frame.height)
+        let titleFont: UIFont = UIFont.systemFont(ofSize: 20, weight: .regular)
+        
+        // Calculate the width of the Tab Title string
+        let titleWidth = NSString(string: tabTitle).boundingRect(with: tabSize, options: .usesLineFragmentOrigin, attributes: [.font: titleFont], context: nil).size.width
+        
+        let tabWidth = titleWidth + addSpace
+        
+        return CGSize(width: tabWidth, height: collectionview.frame.height)
     }
     
 }

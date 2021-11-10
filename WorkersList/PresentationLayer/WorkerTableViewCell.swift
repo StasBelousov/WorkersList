@@ -31,7 +31,7 @@ class WorkerTableViewCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = UIColor(red: 0.333, green: 0.333, blue: 0.361, alpha: 1)
-        label.font = UIFont(name: "Inter-Regular", size: 13)
+        label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         return label
     }()
     
@@ -54,7 +54,7 @@ class WorkerTableViewCell: UITableViewCell {
         
         NSLayoutConstraint.activate([
             workerImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            workerImage.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -3),
+            workerImage.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -6),
             workerImage.trailingAnchor.constraint(equalTo: infoStackView.leadingAnchor, constant: -16),
             workerImage.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 6),
             workerImage.heightAnchor.constraint(equalToConstant: 72),
@@ -84,7 +84,7 @@ class WorkerTableViewCell: UITableViewCell {
     
     func setData(cellData: Item) {
         workerName.text = cellData.firstName
-        workerPosition.text = cellData.department
+        workerPosition.text = cellData.position
     }
     
 }

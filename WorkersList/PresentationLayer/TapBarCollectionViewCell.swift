@@ -10,20 +10,17 @@ import UIKit
 class TapBarCollectionViewCell: UICollectionViewCell {
     
     private lazy var nameLabel: UILabel = {
-        let label = UILabel(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height))
+        let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = UIColor(red: 0.591, green: 0.591, blue: 0.609, alpha: 1)
         label.font = UIFont(name: "Inter-Medium", size: 15)
         label.textAlignment = .center
-        label.lineBreakMode = .byWordWrapping
+      
         return label
     }()
     
     private lazy var bottomUnderlineView: UIView = {
-        let underlineView = UIView(frame: CGRect(x: 0,
-                                                 y: self.frame.height - 2,
-                                                 width: nameLabel.frame.width,
-                                                 height: 2))
+        let underlineView = UIView()
         underlineView.backgroundColor = UIColor(red: 0.396, green: 0.204, blue: 1, alpha: 1)
         underlineView.translatesAutoresizingMaskIntoConstraints = false
         underlineView.isHidden = true
@@ -34,6 +31,16 @@ class TapBarCollectionViewCell: UICollectionViewCell {
         super.init(frame : frame)
         contentView.addSubview(nameLabel)
         contentView.addSubview(bottomUnderlineView)
+        
+        NSLayoutConstraint.activate([
+            nameLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            nameLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+            nameLabel.heightAnchor.constraint(equalToConstant: 30),
+            
+            bottomUnderlineView.topAnchor.constraint(equalTo: nameLabel.bottomAnchor),
+            bottomUnderlineView.widthAnchor.constraint(equalTo: self.widthAnchor),
+            bottomUnderlineView.heightAnchor.constraint(equalToConstant: 2)
+    ])
     }
     
     required init?(coder: NSCoder) {
@@ -45,9 +52,16 @@ class TapBarCollectionViewCell: UICollectionViewCell {
             self.bottomUnderlineView.isHidden = self.isSelected ? false : true
         }
     }
+    override func prepareForReuse() {
+            super.prepareForReuse()
+            nameLabel.text = ""
+        }
     
-    func setUp(text: String) {
+    func setupUI(text: String) {
         nameLabel.text = text
+//        if text == "All" {
+//            isSelected = true
+//        }
     }
     
 }

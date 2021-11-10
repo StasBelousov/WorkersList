@@ -16,13 +16,49 @@ struct UsersData: Codable {
 struct Item: Codable {
     let id: String?
     let avatarURL: String?
-    let firstName, lastName, userTag, department: String?
+    let firstName, lastName, userTag: String?
+    let department: String?
+    var departmentTitle: String? {
+        get {
+            switch department {
+            case "back_office":
+                return "Back Office"
+            case "analytics":
+                return "Analytics"
+            case "android":
+                return "Android"
+            case "qa":
+                return "QA"
+            case "support":
+                return "Support"
+            case "ios":
+                return "iOS"
+            case "hr":
+                return "HR"
+            case "frontend":
+                return "Frontend"
+            case "design":
+                return "Design"
+            case "management":
+                return "Management"
+            case "backend":
+                return "Backend"
+            case "pr":
+                return "PR"
+            default:
+                return "Other"
+        }
+    }
+    }
+
     let position, birthday, phone: String?
 
     enum CodingKeys: String, CodingKey {
         case id
         case avatarURL = "avatarUrl"
-        case firstName, lastName, userTag, department, position, birthday, phone
+        case firstName, lastName, userTag, position, birthday, phone
+        case department
+        
     }
     
    

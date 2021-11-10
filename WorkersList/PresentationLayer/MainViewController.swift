@@ -15,18 +15,20 @@ class MainViewController: UIViewController {
         
     }
     
-    let testArray = ["ALL", "iOS", "Android", "Admin", "Bob", "ALL", "iOS", "Android", "Admin", "Bob"]
+    var tapBarValues: [String] = []
     
     let collectionview: UICollectionView = {
         let collection = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout.init())
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout.init()
         layout.scrollDirection = UICollectionView.ScrollDirection.horizontal
+        layout.minimumInteritemSpacing = 10
         collection.setCollectionViewLayout(layout, animated: true)
         collection.translatesAutoresizingMaskIntoConstraints = false
         collection.register(TapBarCollectionViewCell.self, forCellWithReuseIdentifier: Constants.collectionViewCell)
         collection.showsVerticalScrollIndicator = false
         collection.showsHorizontalScrollIndicator = false
         collection.backgroundColor = UIColor.white
+       
         return collection
     }()
     
@@ -41,6 +43,13 @@ class MainViewController: UIViewController {
         return tableView
     }()
     
+    private lazy var topUnderlineView: UIView = {
+        let underlineView = UIView()
+        underlineView.backgroundColor = UIColor(red: 0.765, green: 0.765, blue: 0.776, alpha: 0.5)
+        underlineView.translatesAutoresizingMaskIntoConstraints = false
+        return underlineView
+    }()
+    
     private var workers = [Item]()
     private let imageService = ImageService()
     private var loadingAccess = true
@@ -50,10 +59,11 @@ class MainViewController: UIViewController {
         fetchWorkers()
         collectionview.delegate = self
         collectionview.dataSource = self
-        
         view.addSubview(collectionview)
         view.addSubview(tableView)
+        view.addSubview(topUnderlineView)
         view.backgroundColor = .white
+        
         
         let safeLayoutGuide = self.view.safeAreaLayoutGuide
         
@@ -62,14 +72,18 @@ class MainViewController: UIViewController {
             // Constrain the container view to the view controller
             collectionview.topAnchor.constraint(equalTo: safeLayoutGuide.topAnchor),
             collectionview.leadingAnchor.constraint(equalTo: safeLayoutGuide.leadingAnchor, constant: 16),
-            collectionview.widthAnchor.constraint(equalTo: safeLayoutGuide.widthAnchor),
+            collectionview.trailingAnchor.constraint(equalTo: safeLayoutGuide.trailingAnchor, constant: -16),
             collectionview.heightAnchor.constraint(equalToConstant: 36),
             
             //Constrain the tableview to the view controller
             tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
             tableView.topAnchor.constraint(equalTo: self.collectionview.bottomAnchor),
             tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+            tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+            
+            topUnderlineView.bottomAnchor.constraint(equalTo: tableView.topAnchor),
+            topUnderlineView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            topUnderlineView.heightAnchor.constraint(equalToConstant: 1)
             
         ])
     }
@@ -84,11 +98,19 @@ class MainViewController: UIViewController {
                 switch fetchResult {
                 case .success(let fetchedItems):
                     self.workers.append(contentsOf: fetchedItems.items ?? [])
-                    print(self.workers.count)
+                    for worker in self.workers {
+                        if let department = worker.departmentTitle {
+                            if !self.tapBarValues.contains(department) {
+                                self.tapBarValues.append(department)
+                            }
+                        }
+                    }
+                    self.tapBarValues.insert("All", at: 0)
                     self.loadingAccess = true
                 case .failure(let error):
                     print(error)
                 }
+                self.collectionview.reloadData()
                 self.tableView.reloadData()
                 self.tableView.tableFooterView?.isHidden = true
             }
@@ -119,10 +141,6 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 80
-    }
-    
 }
 
 //MARK: UICollectionViewDelegate, UICollectionViewDataSource
@@ -133,21 +151,20 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 .dequeueReusableCell(withReuseIdentifier: Constants.collectionViewCell, for: indexPath) as? TapBarCollectionViewCell else {
             fatalError("Collection View Cell class not found.")
         }
-        cell.setUp(text: testArray[indexPath.row])
-        if indexPath.row == 0 {
-            cell.isSelected = true
-        }
+        cell.setupUI(text: tapBarValues[indexPath.row])
+//        if indexPath.row == 0 {
+//            cell.isSelected = true
+//        }
         
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return testArray.count
+        return tapBarValues.count
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-        collectionView.setNeedsLayout()
     }
     
 }
@@ -158,10 +175,10 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         // Add more space left and right the tab
-        let addSpace: CGFloat = 20
-        let tabTitle = testArray[indexPath.row]
+        let addSpace: CGFloat = 16
+        let tabTitle = tapBarValues[indexPath.row]
         let tabSize = CGSize(width: 500, height: collectionview.frame.height)
-        let titleFont: UIFont = UIFont.systemFont(ofSize: 20, weight: .regular)
+        let titleFont = UIFont.systemFont(ofSize: 16, weight: .regular)
         
         // Calculate the width of the Tab Title string
         let titleWidth = NSString(string: tabTitle).boundingRect(with: tabSize, options: .usesLineFragmentOrigin, attributes: [.font: titleFont], context: nil).size.width

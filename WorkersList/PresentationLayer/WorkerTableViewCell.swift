@@ -22,7 +22,7 @@ class WorkerTableViewCell: UITableViewCell {
     let workerName: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = UIColor(red: 0.02, green: 0.02, blue: 0.063, alpha: 1)
+        label.textColor = Colors.workerTableViewCellNameLabel
         label.font = UIFont(name: "Inter-Medium", size: 16)
         return label
     }()
@@ -30,7 +30,7 @@ class WorkerTableViewCell: UITableViewCell {
     let workerPosition: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = UIColor(red: 0.333, green: 0.333, blue: 0.361, alpha: 1)
+        label.textColor = Colors.workerTableViewCellPosition
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         return label
     }()
@@ -79,12 +79,12 @@ class WorkerTableViewCell: UITableViewCell {
         workerImage.image = image
         workerImage.clipsToBounds = true
         workerImage.layer.cornerRadius = workerImage.frame.height / 2
-        
     }
     
     func setData(cellData: Item) {
-        workerName.text = cellData.firstName
-        workerPosition.text = cellData.position
+        
+        workerName.text = "\(cellData.firstName ?? "") \( cellData.lastName ?? "")"
+        workerPosition.text = cellData.departmentTitle
     }
     
 }

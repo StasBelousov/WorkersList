@@ -25,9 +25,7 @@ class APIService {
                 }
                 if let error = error {
                     completion(.failure(error))
-                } else if let data = data,
-                          let response = response as? HTTPURLResponse,
-                          response.statusCode == 200 {
+                } else if let data = data {
                     do {
                         let json = try JSONDecoder().decode(UsersData.self, from: data)
                         completion(.success(json))

@@ -16,7 +16,9 @@ struct UsersData: Codable {
 struct Item: Codable {
     let id: String?
     let avatarURL: String?
-    let firstName, lastName, userTag: String?
+    let firstName: String?
+    let lastName: String?
+    let userTag: String?
     let department: String?
     var departmentTitle: String? {
         get {
@@ -47,21 +49,24 @@ struct Item: Codable {
                 return "PR"
             default:
                 return "Other"
+            }
         }
     }
-    }
-
-    let position, birthday, phone: String?
-
+    
+    let position: String?
+    let birthday: String?
+    let phone: String?
+    
     enum CodingKeys: String, CodingKey {
         case id
         case avatarURL = "avatarUrl"
-        case firstName, lastName, userTag, position, birthday, phone
+        case firstName
+        case lastName
+        case userTag
+        case position
+        case birthday
+        case phone
         case department
-        
     }
     
-   
-
-   
 }

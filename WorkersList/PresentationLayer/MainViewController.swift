@@ -12,12 +12,39 @@ class MainViewController: UIViewController {
     private enum Constants {
         static let tableViewCell = "cellId"
         static let collectionViewCell = "CollectionViewCell"
-        
     }
     
-    var tapBarValues: [String] = []
+    private let imageService = ImageService()
+    private var loadingAccess = true
+    private var tapBarValues = [String]()
+    private var workers = [Item]()
+    private var filteredWorkers = [Item]()
+    private var isFiltering = false
+    private var selectedDepartment = String()
+    private var searchBarIsEmpty: Bool {
+        guard let text = searchBar.text else {
+            searchedWorker = String()
+            return false }
+        
+        return text.isEmpty
+    }
+    private var isSearching: Bool {
+        return !searchBarIsEmpty
+    }
+    private var searchedWorker = String()
     
-    let collectionview: UICollectionView = {
+    lazy var searchBar: UISearchBar = {
+        let bar = UISearchBar()
+        bar.translatesAutoresizingMaskIntoConstraints = false
+        bar.backgroundImage = UIImage()
+        bar.searchBarStyle = .minimal
+        bar.searchTextField.setIcon("search.png")
+        bar.placeholder = "Enter name, tag, email..."
+        bar.delegate = self
+        return bar
+    }()
+        
+    lazy var collectionview: UICollectionView = {
         let collection = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout.init())
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout.init()
         layout.scrollDirection = UICollectionView.ScrollDirection.horizontal
@@ -45,46 +72,47 @@ class MainViewController: UIViewController {
     
     private lazy var topUnderlineView: UIView = {
         let underlineView = UIView()
-        underlineView.backgroundColor = UIColor(red: 0.765, green: 0.765, blue: 0.776, alpha: 0.5)
+        underlineView.backgroundColor = Colors.backgroundUnderline
         underlineView.translatesAutoresizingMaskIntoConstraints = false
         return underlineView
     }()
-    
-    private var workers = [Item]()
-    private let imageService = ImageService()
-    private var loadingAccess = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
         fetchWorkers()
         collectionview.delegate = self
         collectionview.dataSource = self
+        
+        view.addSubview(searchBar)
         view.addSubview(collectionview)
         view.addSubview(tableView)
         view.addSubview(topUnderlineView)
         view.backgroundColor = .white
         
+//        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleScreenTap(sender:))))
         
         let safeLayoutGuide = self.view.safeAreaLayoutGuide
         
         NSLayoutConstraint.activate([
             
-            // Constrain the container view to the view controller
-            collectionview.topAnchor.constraint(equalTo: safeLayoutGuide.topAnchor),
-            collectionview.leadingAnchor.constraint(equalTo: safeLayoutGuide.leadingAnchor, constant: 16),
-            collectionview.trailingAnchor.constraint(equalTo: safeLayoutGuide.trailingAnchor, constant: -16),
+            searchBar.topAnchor.constraint(equalTo: safeLayoutGuide.topAnchor),
+            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -12),
+            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 12),
+            searchBar.heightAnchor.constraint(equalToConstant: 40),
+           
+            collectionview.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
+            collectionview.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            collectionview.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             collectionview.heightAnchor.constraint(equalToConstant: 36),
-            
-            //Constrain the tableview to the view controller
-            tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            tableView.topAnchor.constraint(equalTo: self.collectionview.bottomAnchor),
-            tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+           
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.topAnchor.constraint(equalTo: collectionview.bottomAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
             topUnderlineView.bottomAnchor.constraint(equalTo: tableView.topAnchor),
             topUnderlineView.widthAnchor.constraint(equalTo: view.widthAnchor),
             topUnderlineView.heightAnchor.constraint(equalToConstant: 1)
-            
         ])
     }
     
@@ -106,6 +134,7 @@ class MainViewController: UIViewController {
                         }
                     }
                     self.tapBarValues.insert("All", at: 0)
+                    self.filteredWorkers = self.workers
                     self.loadingAccess = true
                 case .failure(let error):
                     print(error)
@@ -116,6 +145,27 @@ class MainViewController: UIViewController {
             }
         }
     }
+    private func searchWorker() {
+        filteredWorkers = workers
+        isFiltering = true
+        if isFiltering, selectedDepartment != "All", !selectedDepartment.isEmpty {
+            
+            filteredWorkers = workers.filter(
+                {(worker: Item) -> Bool in
+                return worker.departmentTitle!.contains(selectedDepartment)
+            })
+        }
+        if isSearching {
+            filteredWorkers = filteredWorkers.filter({ (worker: Item) -> Bool in
+                return worker.firstName!.lowercased().contains(searchedWorker.lowercased())
+            })
+        }
+    }
+    
+    //MARK: Actions
+    @objc private func handleScreenTap(sender: UITapGestureRecognizer) {
+        self.view.endEditing(true)
+    }
     
 }
 
@@ -123,12 +173,13 @@ class MainViewController: UIViewController {
 extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return workers.count
+        let numberOfWorkers = isFiltering ? filteredWorkers.count : workers.count
+        return numberOfWorkers
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.tableViewCell, for: indexPath) as! WorkerTableViewCell
-        let cellData = workers[indexPath.row]
+        let cellData = isFiltering ? filteredWorkers[indexPath.row] : workers[indexPath.row]
         
         if let urlString = cellData.avatarURL {
             self.imageService.download(at: urlString) { image in
@@ -153,7 +204,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
         }
         cell.setupUI(text: tapBarValues[indexPath.row])
 //        if indexPath.row == 0 {
-//            cell.isSelected = true
+//            cell. = true
 //        }
         
         return cell
@@ -165,6 +216,11 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+        let depertmentName = tapBarValues[indexPath.row]
+            isFiltering = true
+            selectedDepartment = depertmentName
+            searchWorker()
+            tableView.reloadData()
     }
     
 }
@@ -189,3 +245,16 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
     }
     
 }
+//MARC: UISearchBarDelegate
+extension MainViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        searchedWorker = searchText
+        searchWorker()
+        tableView.reloadData()
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+}
+

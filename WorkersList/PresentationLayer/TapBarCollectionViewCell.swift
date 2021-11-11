@@ -12,7 +12,7 @@ class TapBarCollectionViewCell: UICollectionViewCell {
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = UIColor(red: 0.591, green: 0.591, blue: 0.609, alpha: 1)
+        label.textColor = Colors.tapBarCollectionViewNameLabel
         label.font = UIFont(name: "Inter-Medium", size: 15)
         label.textAlignment = .center
       
@@ -21,7 +21,7 @@ class TapBarCollectionViewCell: UICollectionViewCell {
     
     private lazy var bottomUnderlineView: UIView = {
         let underlineView = UIView()
-        underlineView.backgroundColor = UIColor(red: 0.396, green: 0.204, blue: 1, alpha: 1)
+        underlineView.backgroundColor = Colors.tapBarCollectionViewBottomUnderline
         underlineView.translatesAutoresizingMaskIntoConstraints = false
         underlineView.isHidden = true
         return underlineView
@@ -60,7 +60,7 @@ class TapBarCollectionViewCell: UICollectionViewCell {
     func setupUI(text: String) {
         nameLabel.text = text
 //        if text == "All" {
-//            isSelected = true
+//            bottomUnderlineView.isHidden = false
 //        }
     }
     

@@ -9,11 +9,13 @@
 /* Begin PBXBuildFile section */
 		1929A75627306F3C00CB11C6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1929A75427306F3C00CB11C6 /* Main.storyboard */; };
 		1929A75727306F3C00CB11C6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1929A75527306F3C00CB11C6 /* LaunchScreen.storyboard */; };
+		192AC4CA273C560000ABF138 /* UITextField+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192AC4C9273C560000ABF138 /* UITextField+Extension.swift */; };
 		194A4208272DBEA300A6CD98 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194A4207272DBEA300A6CD98 /* AppDelegate.swift */; };
 		194A420C272DBEA300A6CD98 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194A420B272DBEA300A6CD98 /* MainViewController.swift */; };
 		194A4211272DBEA600A6CD98 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 194A4210272DBEA600A6CD98 /* Assets.xcassets */; };
 		19621CA62739C814005288D0 /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 19621CA02739C752005288D0 /* Inter-Medium.ttf */; };
 		19621CA72739C817005288D0 /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 19621CA42739C752005288D0 /* Inter-Regular.ttf */; };
+		199BBF1C273C81ED00FF9773 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 199BBF1B273C81ED00FF9773 /* Constants.swift */; };
 		19B893AE272F1D2D000825E1 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19B893AD272F1D2D000825E1 /* APIService.swift */; };
 		19B893B1272F1E49000825E1 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19B893B0272F1E49000825E1 /* Model.swift */; };
 		19B893B3272F1EBD000825E1 /* ImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19B893B2272F1EBD000825E1 /* ImageService.swift */; };
@@ -28,6 +30,7 @@
 /* Begin PBXFileReference section */
 		1929A75427306F3C00CB11C6 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		1929A75527306F3C00CB11C6 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		192AC4C9273C560000ABF138 /* UITextField+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Extension.swift"; sourceTree = "<group>"; };
 		194A4204272DBEA300A6CD98 /* WorkersList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WorkersList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		194A4207272DBEA300A6CD98 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		194A420B272DBEA300A6CD98 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -42,6 +45,7 @@
 		19621CA32739C752005288D0 /* Inter-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Light.ttf"; sourceTree = "<group>"; };
 		19621CA42739C752005288D0 /* Inter-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Regular.ttf"; sourceTree = "<group>"; };
 		19621CA52739C752005288D0 /* Inter-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-ExtraBold.ttf"; sourceTree = "<group>"; };
+		199BBF1B273C81ED00FF9773 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		19B893AD272F1D2D000825E1 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		19B893B0272F1E49000825E1 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		19B893B2272F1EBD000825E1 /* ImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageService.swift; sourceTree = "<group>"; };
@@ -134,6 +138,7 @@
 			isa = PBXGroup;
 			children = (
 				194A4210272DBEA600A6CD98 /* Assets.xcassets */,
+				199BBF1B273C81ED00FF9773 /* Constants.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -161,6 +166,7 @@
 			children = (
 				19B893B6272F254B000825E1 /* UITableView+Extension.swift */,
 				19B893B9272F259D000825E1 /* UITableViewCell+Extension.swift */,
+				192AC4C9273C560000ABF138 /* UITextField+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -244,10 +250,12 @@
 				194A4208272DBEA300A6CD98 /* AppDelegate.swift in Sources */,
 				19B893AE272F1D2D000825E1 /* APIService.swift in Sources */,
 				19B893BA272F259D000825E1 /* UITableViewCell+Extension.swift in Sources */,
+				192AC4CA273C560000ABF138 /* UITextField+Extension.swift in Sources */,
 				19B893B5272F2377000825E1 /* WorkerTableViewCell.swift in Sources */,
 				19B893B3272F1EBD000825E1 /* ImageService.swift in Sources */,
 				19CBED3C27383B1D0015DA7F /* TapBarCollectionViewCell.swift in Sources */,
 				19B893B7272F254B000825E1 /* UITableView+Extension.swift in Sources */,
+				199BBF1C273C81ED00FF9773 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

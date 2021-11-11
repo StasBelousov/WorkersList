@@ -38,12 +38,16 @@ class MainViewController: UIViewController {
         bar.translatesAutoresizingMaskIntoConstraints = false
         bar.backgroundImage = UIImage()
         bar.searchBarStyle = .minimal
+        bar.returnKeyType = .done
+        bar.searchTextField.backgroundColor = Colors.lightGrey
+        bar.setBookmark()
+        bar.tintColor = Colors.tapBarCollectionViewBottomUnderline
         bar.searchTextField.setIcon("search.png")
         bar.placeholder = "Enter name, tag, email..."
         bar.delegate = self
         return bar
     }()
-        
+    
     lazy var collectionview: UICollectionView = {
         let collection = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout.init())
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout.init()
@@ -55,7 +59,6 @@ class MainViewController: UIViewController {
         collection.showsVerticalScrollIndicator = false
         collection.showsHorizontalScrollIndicator = false
         collection.backgroundColor = UIColor.white
-       
         return collection
     }()
     
@@ -67,6 +70,7 @@ class MainViewController: UIViewController {
         tableView.registerCell(cellClass: WorkerTableViewCell.self)
         tableView.register(WorkerTableViewCell.self, forCellReuseIdentifier: Constants.tableViewCell)
         tableView.separatorStyle = .none
+        tableView.keyboardDismissMode = .onDrag
         return tableView
     }()
     
@@ -77,21 +81,48 @@ class MainViewController: UIViewController {
         return underlineView
     }()
     
+    private lazy var nobodyFoundView: UIStackView = {
+        let stack = UIStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        
+        let image = UIImageView(image: UIImage(named: "magnifying-glass.png"), highlightedImage: nil)
+        image.contentMode = .scaleAspectFit
+        let label = UILabel()
+        label.text = "Nobody found"
+        label.font = UIFont(name: "Inter-SemiBold", size: 17)
+        let detail = UILabel()
+        detail.text = "Please, try to change the request"
+        detail.font = UIFont(name: "Inter-Regular", size: 16)
+        detail.textColor = Colors.lightGreyTextColor
+        
+        stack.addArrangedSubview(image)
+        stack.addArrangedSubview(label)
+        stack.addArrangedSubview(detail)
+        
+        stack.axis = .vertical
+        stack.spacing = 12
+        stack.alignment = .center
+        return stack
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         fetchWorkers()
         collectionview.delegate = self
         collectionview.dataSource = self
+        searchBar.delegate = self
         
         view.addSubview(searchBar)
         view.addSubview(collectionview)
         view.addSubview(tableView)
         view.addSubview(topUnderlineView)
+        view.addSubview(nobodyFoundView)
         view.backgroundColor = .white
         
-//        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleScreenTap(sender:))))
+        nobodyFoundView.isHidden = true
         
         let safeLayoutGuide = self.view.safeAreaLayoutGuide
+        hideKeyboardWhenTappedAround()
         
         NSLayoutConstraint.activate([
             
@@ -99,12 +130,12 @@ class MainViewController: UIViewController {
             searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -12),
             searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 12),
             searchBar.heightAnchor.constraint(equalToConstant: 40),
-           
+            
             collectionview.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
             collectionview.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             collectionview.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             collectionview.heightAnchor.constraint(equalToConstant: 36),
-           
+            
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.topAnchor.constraint(equalTo: collectionview.bottomAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -112,8 +143,17 @@ class MainViewController: UIViewController {
             
             topUnderlineView.bottomAnchor.constraint(equalTo: tableView.topAnchor),
             topUnderlineView.widthAnchor.constraint(equalTo: view.widthAnchor),
-            topUnderlineView.heightAnchor.constraint(equalToConstant: 1)
+            topUnderlineView.heightAnchor.constraint(equalToConstant: 1),
+            
+            nobodyFoundView.centerYAnchor.constraint(equalTo: searchBar.centerYAnchor, constant: 180),
+            nobodyFoundView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            nobodyFoundView.heightAnchor.constraint(equalToConstant: 120),
+            nobodyFoundView.widthAnchor.constraint(equalToConstant: 350)
         ])
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        searchBar.setBookmark()
     }
     
     //MARK: Data request
@@ -152,8 +192,8 @@ class MainViewController: UIViewController {
             
             filteredWorkers = workers.filter(
                 {(worker: Item) -> Bool in
-                return worker.departmentTitle!.contains(selectedDepartment)
-            })
+                    return worker.departmentTitle!.contains(selectedDepartment)
+                })
         }
         if isSearching {
             filteredWorkers = filteredWorkers.filter({ (worker: Item) -> Bool in
@@ -163,9 +203,6 @@ class MainViewController: UIViewController {
     }
     
     //MARK: Actions
-    @objc private func handleScreenTap(sender: UITapGestureRecognizer) {
-        self.view.endEditing(true)
-    }
     
 }
 
@@ -174,6 +211,7 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let numberOfWorkers = isFiltering ? filteredWorkers.count : workers.count
+        nobodyFoundView.isHidden = !(numberOfWorkers == 0)
         return numberOfWorkers
     }
     
@@ -203,9 +241,9 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
             fatalError("Collection View Cell class not found.")
         }
         cell.setupUI(text: tapBarValues[indexPath.row])
-//        if indexPath.row == 0 {
-//            cell. = true
-//        }
+        //        if indexPath.row == 0 {
+        //            cell. = true
+        //        }
         
         return cell
     }
@@ -217,10 +255,10 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
         let depertmentName = tapBarValues[indexPath.row]
-            isFiltering = true
-            selectedDepartment = depertmentName
-            searchWorker()
-            tableView.reloadData()
+        isFiltering = true
+        selectedDepartment = depertmentName
+        searchWorker()
+        tableView.reloadData()
     }
     
 }
@@ -245,7 +283,8 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
     }
     
 }
-//MARC: UISearchBarDelegate
+
+//MARK: UISearchBarDelegate
 extension MainViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         searchedWorker = searchText
@@ -256,5 +295,21 @@ extension MainViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
     }
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        searchBar.setShowsCancelButton(true, animated: true)
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.text = nil
+        searchBar.endEditing(true)
+        tableView.reloadData()
+    }
+    
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        searchBar.setShowsCancelButton(false, animated: true)
+    }
+    
+    
 }
 

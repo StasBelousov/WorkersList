@@ -12,7 +12,7 @@ class TapBarCollectionViewCell: UICollectionViewCell {
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = Colors.tapBarCollectionViewNameLabel
+        label.textColor = Colors.lightGreyTextColor
         label.font = UIFont(name: "Inter-Medium", size: 15)
         label.textAlignment = .center
       

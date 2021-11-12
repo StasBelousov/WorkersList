@@ -43,6 +43,14 @@ class WorkerTableViewCell: UITableViewCell {
         return stack
     }()
     
+    let tagLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = Colors.lightGreyTextColor
+        label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        return label
+    }()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -50,6 +58,7 @@ class WorkerTableViewCell: UITableViewCell {
         infoStackView.addArrangedSubview(workerPosition)
         contentView.addSubview(infoStackView)
         contentView.addSubview(workerImage)
+        contentView.addSubview(tagLabel)
         self.selectionStyle = .none
         
         NSLayoutConstraint.activate([
@@ -61,7 +70,12 @@ class WorkerTableViewCell: UITableViewCell {
             workerImage.widthAnchor.constraint(equalToConstant: 72),
             
             infoStackView.heightAnchor.constraint(equalToConstant: 45),
-            infoStackView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+            infoStackView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            
+            tagLabel.leadingAnchor.constraint(equalTo: infoStackView.trailingAnchor, constant: 4),
+            tagLabel.topAnchor.constraint(equalTo: infoStackView.topAnchor, constant: 4)
+            
+            
         ])
     }
     
@@ -85,6 +99,7 @@ class WorkerTableViewCell: UITableViewCell {
         
         workerName.text = "\(cellData.firstName ?? "") \( cellData.lastName ?? "")"
         workerPosition.text = cellData.departmentTitle
+        tagLabel.text = cellData.userTag?.lowercased()
     }
     
 }

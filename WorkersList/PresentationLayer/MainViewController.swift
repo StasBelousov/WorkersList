@@ -41,7 +41,7 @@ class MainViewController: UIViewController {
         bar.backgroundImage = UIImage()
         bar.searchBarStyle = .minimal
         bar.returnKeyType = .search
-        bar.searchTextField.backgroundColor = Colors.lightGrey
+        bar.searchTextField.backgroundColor = Colors.backgroudWhite
        // bar.setBookmark()
         bar.tintColor = Colors.tapBarCollectionViewBottomUnderline
         bar.searchTextField.setIcon("search.png")

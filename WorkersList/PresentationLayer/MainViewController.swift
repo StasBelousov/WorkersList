@@ -18,7 +18,9 @@ class MainViewController: UIViewController {
     private var loadingAccess = true
     private var tapBarValues = [String]()
     private var workers = [Item]()
-    private var filteredWorkers = [Item]()
+    private var filteredWorkers: [Item] = [] {
+        didSet { tableView.reloadData() }
+    }
     private var isFiltering = false
     private var selectedDepartment = String()
     private var searchBarIsEmpty: Bool {
@@ -38,9 +40,9 @@ class MainViewController: UIViewController {
         bar.translatesAutoresizingMaskIntoConstraints = false
         bar.backgroundImage = UIImage()
         bar.searchBarStyle = .minimal
-        bar.returnKeyType = .done
+        bar.returnKeyType = .search
         bar.searchTextField.backgroundColor = Colors.lightGrey
-        bar.setBookmark()
+       // bar.setBookmark()
         bar.tintColor = Colors.tapBarCollectionViewBottomUnderline
         bar.searchTextField.setIcon("search.png")
         bar.placeholder = "Enter name, tag, email..."
@@ -107,7 +109,6 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchWorkers()
         collectionview.delegate = self
         collectionview.dataSource = self
         searchBar.delegate = self
@@ -154,6 +155,7 @@ class MainViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         searchBar.setBookmark()
+        fetchWorkers()
     }
     
     //MARK: Data request
@@ -165,7 +167,7 @@ class MainViewController: UIViewController {
             DispatchQueue.main.async {
                 switch fetchResult {
                 case .success(let fetchedItems):
-                    self.workers.append(contentsOf: fetchedItems.items ?? [])
+                    self.workers.append(contentsOf: fetchedItems.items)
                     for worker in self.workers {
                         if let department = worker.departmentTitle {
                             if !self.tapBarValues.contains(department) {
@@ -177,6 +179,9 @@ class MainViewController: UIViewController {
                     self.filteredWorkers = self.workers
                     self.loadingAccess = true
                 case .failure(let error):
+                    let newViewController = CriticalErrorViewController()
+                    newViewController.modalPresentationStyle = .fullScreen
+                    self.present(newViewController, animated: true)
                     print(error)
                 }
                 self.collectionview.reloadData()
@@ -258,7 +263,6 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
         isFiltering = true
         selectedDepartment = depertmentName
         searchWorker()
-        tableView.reloadData()
     }
     
 }
@@ -289,27 +293,22 @@ extension MainViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         searchedWorker = searchText
         searchWorker()
-        tableView.reloadData()
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
     }
-    
+   
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         searchBar.setShowsCancelButton(true, animated: true)
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.text = nil
-        searchBar.endEditing(true)
-        tableView.reloadData()
-    }
-    
-    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        isFiltering = true
         searchBar.setShowsCancelButton(false, animated: true)
+        searchWorker()
     }
-    
     
 }
 

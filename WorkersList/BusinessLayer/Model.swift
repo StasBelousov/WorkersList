@@ -9,12 +9,12 @@ import Foundation
 
 // MARK: - UsersData
 struct UsersData: Codable {
-    let items: [Item]?
+    let items: [Item]
 }
 
 // MARK: - Item
 struct Item: Codable {
-    let id: String?
+    let id: String
     let avatarURL: String?
     let firstName: String?
     let lastName: String?

@@ -24,11 +24,16 @@ class APIService {
                     self?.dataTask = nil
                 }
                 if let error = error {
-                    completion(.failure(error))
-                } else if let data = data {
+                    completion(.failure(error))}
+                
+                if let data = data {
                     do {
                         let json = try JSONDecoder().decode(UsersData.self, from: data)
-                        completion(.success(json))
+                        
+                        if let response = response as? HTTPURLResponse, response.statusCode == 200 {
+                            completion(.success(json))
+                        }
+                        
                     } catch {
                         completion(.failure(error))
                     }

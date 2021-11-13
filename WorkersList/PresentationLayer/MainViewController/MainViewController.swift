@@ -12,10 +12,11 @@ class MainViewController: UIViewController {
     private enum Constants {
         static let tableViewCell = "cellId"
         static let collectionViewCell = "CollectionViewCell"
+        static let gradietCellId = "gradietCellId"
     }
     
     private let imageService = ImageService()
-    private var loadingAccess = true
+    private var loadingAccess = false
     private var tapBarValues = [String]()
     private var workers = [Item]()
     private var filteredWorkers: [Item] = [] {
@@ -42,7 +43,7 @@ class MainViewController: UIViewController {
         bar.searchBarStyle = .minimal
         bar.returnKeyType = .search
         bar.searchTextField.backgroundColor = Colors.backgroudWhite
-       // bar.setBookmark()
+        // bar.setBookmark()
         bar.tintColor = Colors.tapBarCollectionViewBottomUnderline
         bar.searchTextField.setIcon("search.png")
         bar.placeholder = "Enter name, tag, email..."
@@ -64,6 +65,13 @@ class MainViewController: UIViewController {
         return collection
     }()
     
+    lazy var refreshControl: UIRefreshControl = {
+        let refresh = UIRefreshControl()
+        refresh.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
+        return refresh
+    }()
+    
+    
     lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -71,8 +79,10 @@ class MainViewController: UIViewController {
         tableView.dataSource = self
         tableView.registerCell(cellClass: WorkerTableViewCell.self)
         tableView.register(WorkerTableViewCell.self, forCellReuseIdentifier: Constants.tableViewCell)
+        tableView.register(GradienTableViewCell.self, forCellReuseIdentifier: Constants.gradietCellId)
         tableView.separatorStyle = .none
         tableView.keyboardDismissMode = .onDrag
+        tableView.addSubview(refreshControl)
         return tableView
     }()
     
@@ -156,6 +166,7 @@ class MainViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         searchBar.setBookmark()
         fetchWorkers()
+        tableView.reloadData()
     }
     
     //MARK: Data request
@@ -167,6 +178,9 @@ class MainViewController: UIViewController {
             DispatchQueue.main.async {
                 switch fetchResult {
                 case .success(let fetchedItems):
+                    self.filteredWorkers.removeAll()
+                    self.tapBarValues.removeAll()
+                    self.workers.removeAll()
                     self.workers.append(contentsOf: fetchedItems.items)
                     for worker in self.workers {
                         if let department = worker.departmentTitle {
@@ -202,12 +216,18 @@ class MainViewController: UIViewController {
         }
         if isSearching {
             filteredWorkers = filteredWorkers.filter({ (worker: Item) -> Bool in
-                return worker.firstName!.lowercased().contains(searchedWorker.lowercased())
+                let result = (worker.firstName ?? "") + (worker.lastName ?? "") + (worker.userTag ?? "")
+                return result.lowercased().contains(searchedWorker.lowercased())
             })
         }
     }
     
     //MARK: Actions
+    @objc func refresh(_ sender: AnyObject) {
+        fetchWorkers()
+        searchBar.text = nil
+        sender.endRefreshing()
+    }
     
 }
 
@@ -216,23 +236,32 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let numberOfWorkers = isFiltering ? filteredWorkers.count : workers.count
-        nobodyFoundView.isHidden = !(numberOfWorkers == 0)
-        return numberOfWorkers
+        let resultNumberOfWorkers = loadingAccess ? numberOfWorkers : 10
+        nobodyFoundView.isHidden = !(resultNumberOfWorkers == 0)
+        return resultNumberOfWorkers
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.tableViewCell, for: indexPath) as! WorkerTableViewCell
-        let cellData = isFiltering ? filteredWorkers[indexPath.row] : workers[indexPath.row]
         
-        if let urlString = cellData.avatarURL {
-            self.imageService.download(at: urlString) { image in
-                guard let avatar = image else { return }
-                cell.setImage(image: avatar)
+        if loadingAccess {
+            let cell = tableView.dequeueReusableCell(withIdentifier: Constants.tableViewCell, for: indexPath) as! WorkerTableViewCell
+            
+            let cellData = isFiltering ? filteredWorkers[indexPath.row] : workers[indexPath.row]
+            
+            if let urlString = cellData.avatarURL {
+                self.imageService.download(at: urlString) { image in
+                    guard let avatar = image else { return }
+                    if self.loadingAccess {
+                        cell.setImage(image: avatar)
+                    }
+                }
             }
+            cell.setData(cellData: cellData)
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: Constants.gradietCellId, for: indexPath) as! GradienTableViewCell
+            return cell
         }
-        
-        cell.setData(cellData: cellData)
-        return cell
     }
     
 }
@@ -246,10 +275,6 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
             fatalError("Collection View Cell class not found.")
         }
         cell.setupUI(text: tapBarValues[indexPath.row])
-        //        if indexPath.row == 0 {
-        //            cell. = true
-        //        }
-        
         return cell
     }
     
@@ -298,7 +323,7 @@ extension MainViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
     }
-   
+    
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         searchBar.setShowsCancelButton(true, animated: true)
     }

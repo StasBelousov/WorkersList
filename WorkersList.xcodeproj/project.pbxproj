@@ -19,6 +19,8 @@
 		199BBF1E273D8EC500FF9773 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 199BBF1D273D8EC500FF9773 /* UIViewController+Extension.swift */; };
 		199BBF20273D9FC400FF9773 /* UISearchBar+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 199BBF1F273D9FC400FF9773 /* UISearchBar+Extension.swift */; };
 		19A85A50273EE3E5009CF354 /* CriticalErrorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A85A4F273EE3E5009CF354 /* CriticalErrorViewController.swift */; };
+		19A85A5527400CF7009CF354 /* GradienTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A85A5427400CF7009CF354 /* GradienTableViewCell.swift */; };
+		19A85A57274025AC009CF354 /* CAGradientLayer+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A85A56274025AC009CF354 /* CAGradientLayer+Extensions.swift */; };
 		19B893AE272F1D2D000825E1 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19B893AD272F1D2D000825E1 /* APIService.swift */; };
 		19B893B1272F1E49000825E1 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19B893B0272F1E49000825E1 /* Model.swift */; };
 		19B893B3272F1EBD000825E1 /* ImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19B893B2272F1EBD000825E1 /* ImageService.swift */; };
@@ -52,10 +54,12 @@
 		199BBF1D273D8EC500FF9773 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		199BBF1F273D9FC400FF9773 /* UISearchBar+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISearchBar+Extension.swift"; sourceTree = "<group>"; };
 		19A85A4F273EE3E5009CF354 /* CriticalErrorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CriticalErrorViewController.swift; sourceTree = "<group>"; };
+		19A85A5427400CF7009CF354 /* GradienTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradienTableViewCell.swift; sourceTree = "<group>"; };
+		19A85A56274025AC009CF354 /* CAGradientLayer+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CAGradientLayer+Extensions.swift"; sourceTree = "<group>"; };
 		19B893AD272F1D2D000825E1 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		19B893B0272F1E49000825E1 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		19B893B2272F1EBD000825E1 /* ImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageService.swift; sourceTree = "<group>"; };
-		19B893B4272F2377000825E1 /* WorkerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = WorkerTableViewCell.swift; path = WorkersList/PresentationLayer/WorkerTableViewCell.swift; sourceTree = SOURCE_ROOT; };
+		19B893B4272F2377000825E1 /* WorkerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = WorkerTableViewCell.swift; path = WorkersList/PresentationLayer/MainViewController/WorkerTableViewCell.swift; sourceTree = SOURCE_ROOT; };
 		19B893B6272F254B000825E1 /* UITableView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Extension.swift"; sourceTree = "<group>"; };
 		19B893B9272F259D000825E1 /* UITableViewCell+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableViewCell+Extension.swift"; sourceTree = "<group>"; };
 		19B893BC272F47C5000825E1 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -119,14 +123,31 @@
 			path = Font;
 			sourceTree = "<group>";
 		};
-		19B893A9272F1BBD000825E1 /* PresentationLayer */ = {
+		19A85A5127400BEC009CF354 /* Storyboards */ = {
 			isa = PBXGroup;
 			children = (
 				1929A75527306F3C00CB11C6 /* LaunchScreen.storyboard */,
 				1929A75427306F3C00CB11C6 /* Main.storyboard */,
+			);
+			path = Storyboards;
+			sourceTree = "<group>";
+		};
+		19A85A5327400C1F009CF354 /* MainViewController */ = {
+			isa = PBXGroup;
+			children = (
 				194A420B272DBEA300A6CD98 /* MainViewController.swift */,
 				19B893B4272F2377000825E1 /* WorkerTableViewCell.swift */,
+				19A85A5427400CF7009CF354 /* GradienTableViewCell.swift */,
 				19CBED3B27383B1D0015DA7F /* TapBarCollectionViewCell.swift */,
+			);
+			path = MainViewController;
+			sourceTree = "<group>";
+		};
+		19B893A9272F1BBD000825E1 /* PresentationLayer */ = {
+			isa = PBXGroup;
+			children = (
+				19A85A5127400BEC009CF354 /* Storyboards */,
+				19A85A5327400C1F009CF354 /* MainViewController */,
 				19A85A4F273EE3E5009CF354 /* CriticalErrorViewController.swift */,
 			);
 			path = PresentationLayer;
@@ -176,6 +197,7 @@
 				192AC4C9273C560000ABF138 /* UITextField+Extension.swift */,
 				199BBF1D273D8EC500FF9773 /* UIViewController+Extension.swift */,
 				199BBF1F273D9FC400FF9773 /* UISearchBar+Extension.swift */,
+				19A85A56274025AC009CF354 /* CAGradientLayer+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -255,6 +277,7 @@
 			files = (
 				19B893B1272F1E49000825E1 /* Model.swift in Sources */,
 				199BBF1E273D8EC500FF9773 /* UIViewController+Extension.swift in Sources */,
+				19A85A5527400CF7009CF354 /* GradienTableViewCell.swift in Sources */,
 				194A420C272DBEA300A6CD98 /* MainViewController.swift in Sources */,
 				19B893BD272F47C5000825E1 /* SceneDelegate.swift in Sources */,
 				19A85A50273EE3E5009CF354 /* CriticalErrorViewController.swift in Sources */,
@@ -267,6 +290,7 @@
 				19CBED3C27383B1D0015DA7F /* TapBarCollectionViewCell.swift in Sources */,
 				19B893B7272F254B000825E1 /* UITableView+Extension.swift in Sources */,
 				199BBF1C273C81ED00FF9773 /* Constants.swift in Sources */,
+				19A85A57274025AC009CF354 /* CAGradientLayer+Extensions.swift in Sources */,
 				199BBF20273D9FC400FF9773 /* UISearchBar+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

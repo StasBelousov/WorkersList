@@ -12,7 +12,6 @@ class CriticalErrorViewController: UIViewController {
     private lazy var informationStack: UIStackView = {
         let stack = UIStackView()
         stack.translatesAutoresizingMaskIntoConstraints = false
-        
         let image = UIImageView(image: UIImage(named: "saucer.png"))
         image.contentMode = .scaleAspectFit
         

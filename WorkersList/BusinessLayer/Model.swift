@@ -55,6 +55,27 @@ struct Item: Codable {
     
     let position: String?
     let birthday: String?
+    var birthdayYear: String? {
+        get {
+            let dateFormatter = DateFormatter(format: "yyyy.MM.dd")
+            
+            if let date = birthday?.lowercased() {
+                return date.toDateString(dateFormatter: dateFormatter, outputFormat: "yyyy")
+            }
+            return ""
+        }
+    }
+    var formattedBirthday: String? {
+        get {
+            let dateFormatter = DateFormatter(format: "yyyy.MM.dd")
+            
+            if let date = birthday?.lowercased() {
+                return date.toDateString(dateFormatter: dateFormatter, outputFormat: "dd MMM yyyy")
+            }
+            return ""
+        }
+    }
+    
     let phone: String?
     
     enum CodingKeys: String, CodingKey {

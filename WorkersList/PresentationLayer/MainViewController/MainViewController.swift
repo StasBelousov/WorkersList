@@ -229,21 +229,23 @@ class MainViewController: UIViewController {
                 button.isSelected = false
             case .alphabet:
                 button.isSelected = true
-        
                 filteredWorkers = filteredWorkers.sorted {
                     var isSorted = false
                     if let firstItem = $0.firstName, let secondItem = $1.firstName {
-                       
-                       isSorted = firstItem.lowercased() < secondItem.lowercased()
+                        isSorted = firstItem.lowercased() < secondItem.lowercased()
                     }
                     return isSorted
-                   }
+                }
             case .birthday:
                 button.isSelected = true
-                print(" button.isSelected = true")
+                filteredWorkers = filteredWorkers.sorted {
+                    var isSorted = false
+                    if let firstItem = $0.birthday, let secondItem = $1.birthday {
+                        isSorted = firstItem.lowercased() < secondItem.lowercased()
+                    }
+                    return isSorted
+                }
             }
-            
-            //print(buttomSheet)
         }
     }
     
@@ -254,13 +256,6 @@ class MainViewController: UIViewController {
             button.setImage(UIImage(named: "mark_color.png"), for: .highlighted)
             button.setImage(UIImage(named: "mark_color.png"), for: .selected)
             button.addTarget(self, action: #selector(self.presentModalController(_:)), for: .touchDown)
-        }
-    }
-    
-    func setTableByAlphabet() {
-        if let button = searchBar.searchTextField.rightView as? UIButton {
-            button.isSelected = true
-            
         }
     }
     
@@ -308,6 +303,7 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
                 }
             }
             cell.setData(cellData: cellData)
+            cell.birthdayLabel.text = buttomSheet == .birthday ? cellData.formattedBirthday : ""
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: Constants.gradietCellId, for: indexPath) as! GradienTableViewCell

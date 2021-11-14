@@ -51,6 +51,15 @@ class WorkerTableViewCell: UITableViewCell {
         return label
     }()
     
+    let birthdayLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = Colors.lightGreyTextColor
+        label.textAlignment = .right
+        label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        return label
+    }()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -59,6 +68,7 @@ class WorkerTableViewCell: UITableViewCell {
         contentView.addSubview(infoStackView)
         contentView.addSubview(workerImage)
         contentView.addSubview(tagLabel)
+        contentView.addSubview(birthdayLabel)
         self.selectionStyle = .none
         
         NSLayoutConstraint.activate([
@@ -73,9 +83,11 @@ class WorkerTableViewCell: UITableViewCell {
             infoStackView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             
             tagLabel.leadingAnchor.constraint(equalTo: infoStackView.trailingAnchor, constant: 4),
-            tagLabel.topAnchor.constraint(equalTo: infoStackView.topAnchor, constant: 4)
+            tagLabel.topAnchor.constraint(equalTo: infoStackView.topAnchor, constant: 4),
             
-            
+            birthdayLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
+            birthdayLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            birthdayLabel.heightAnchor.constraint(equalToConstant: 20)
         ])
     }
     
@@ -98,7 +110,7 @@ class WorkerTableViewCell: UITableViewCell {
     func setData(cellData: Item) {
         
         workerName.text = "\(cellData.firstName ?? "") \( cellData.lastName ?? "")"
-        workerPosition.text = cellData.departmentTitle
+        workerPosition.text = cellData.birthday
         tagLabel.text = cellData.userTag?.lowercased()
     }
     

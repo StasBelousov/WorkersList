@@ -35,6 +35,9 @@ class MainViewController: UIViewController {
         return !searchBarIsEmpty
     }
     private var searchedWorker = String()
+    var buttomSheet: filterMode = .none {
+        didSet { searchWorker() }
+    }
     
     lazy var searchBar: UISearchBar = {
         let bar = UISearchBar()
@@ -94,9 +97,6 @@ class MainViewController: UIViewController {
     }()
     
     private lazy var nobodyFoundView: UIStackView = {
-        let stack = UIStackView()
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        
         let image = UIImageView(image: UIImage(named: "magnifying-glass.png"), highlightedImage: nil)
         image.contentMode = .scaleAspectFit
         let label = UILabel()
@@ -107,16 +107,15 @@ class MainViewController: UIViewController {
         detail.font = UIFont(name: "Inter-Regular", size: 16)
         detail.textColor = Colors.lightGreyTextColor
         
-        stack.addArrangedSubview(image)
-        stack.addArrangedSubview(label)
-        stack.addArrangedSubview(detail)
-        
+        let stack = UIStackView(arrangedSubviews: [image, label, detail])
+        stack.translatesAutoresizingMaskIntoConstraints = false
         stack.axis = .vertical
         stack.spacing = 12
         stack.alignment = .center
         return stack
     }()
     
+    //MARK: Override ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionview.delegate = self
@@ -163,8 +162,9 @@ class MainViewController: UIViewController {
         ])
     }
     
+    //MARK: Override viewDidAppear
     override func viewDidAppear(_ animated: Bool) {
-        searchBar.setBookmark()
+        setBookmark()
         fetchWorkers()
         tableView.reloadData()
     }
@@ -204,6 +204,8 @@ class MainViewController: UIViewController {
             }
         }
     }
+    
+    //MARK: Sorting funcions
     private func searchWorker() {
         filteredWorkers = workers
         isFiltering = true
@@ -220,13 +222,62 @@ class MainViewController: UIViewController {
                 return result.lowercased().contains(searchedWorker.lowercased())
             })
         }
+        
+        if let button = searchBar.searchTextField.rightView as? UIButton {
+            switch buttomSheet {
+            case .none:
+                button.isSelected = false
+            case .alphabet:
+                button.isSelected = true
+        
+                filteredWorkers = filteredWorkers.sorted {
+                    var isSorted = false
+                    if let firstItem = $0.firstName, let secondItem = $1.firstName {
+                       
+                       isSorted = firstItem.lowercased() < secondItem.lowercased()
+                    }
+                    return isSorted
+                   }
+            case .birthday:
+                button.isSelected = true
+                print(" button.isSelected = true")
+            }
+            
+            //print(buttomSheet)
+        }
+    }
+    
+    func setBookmark() {
+        searchBar.showsBookmarkButton = true
+        if let button = searchBar.searchTextField.rightView as? UIButton {
+            button.setImage(UIImage(named: "mark_grey.png"), for: .normal)
+            button.setImage(UIImage(named: "mark_color.png"), for: .highlighted)
+            button.setImage(UIImage(named: "mark_color.png"), for: .selected)
+            button.addTarget(self, action: #selector(self.presentModalController(_:)), for: .touchDown)
+        }
+    }
+    
+    func setTableByAlphabet() {
+        if let button = searchBar.searchTextField.rightView as? UIButton {
+            button.isSelected = true
+            
+        }
     }
     
     //MARK: Actions
     @objc func refresh(_ sender: AnyObject) {
         fetchWorkers()
         searchBar.text = nil
+        buttomSheet = .none
         sender.endRefreshing()
+    }
+    
+    @objc func presentModalController(_ sender: AnyObject) {
+        let vc = CustomModalViewController()
+        vc.modalPresentationStyle = .overCurrentContext
+        vc.buttomSheet = buttomSheet
+        
+        self.present(vc, animated: false)
     }
     
 }

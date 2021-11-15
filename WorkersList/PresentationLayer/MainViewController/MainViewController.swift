@@ -20,7 +20,7 @@ class MainViewController: UIViewController {
     private var tapBarValues = [String]()
     private var workers = [Item]()
     private var filteredWorkers: [Item] = [] {
-        didSet { tableView.reloadData() }
+        didSet { mainTableView.reloadData() }
     }
     private var isFiltering = false
     private var selectedDepartment = String()
@@ -38,6 +38,7 @@ class MainViewController: UIViewController {
     var buttomSheet: filterMode = .none {
         didSet { searchWorker() }
     }
+    private var shouldDetailControllerDismiss = false
     
     lazy var searchBar: UISearchBar = {
         let bar = UISearchBar()
@@ -75,7 +76,7 @@ class MainViewController: UIViewController {
     }()
     
     
-    lazy var tableView: UITableView = {
+    lazy var mainTableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.delegate = self
@@ -124,7 +125,7 @@ class MainViewController: UIViewController {
         
         view.addSubview(searchBar)
         view.addSubview(collectionview)
-        view.addSubview(tableView)
+        view.addSubview(mainTableView)
         view.addSubview(topUnderlineView)
         view.addSubview(nobodyFoundView)
         view.backgroundColor = .white
@@ -146,12 +147,12 @@ class MainViewController: UIViewController {
             collectionview.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             collectionview.heightAnchor.constraint(equalToConstant: 36),
             
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.topAnchor.constraint(equalTo: collectionview.bottomAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            mainTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            mainTableView.topAnchor.constraint(equalTo: collectionview.bottomAnchor),
+            mainTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            mainTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
-            topUnderlineView.bottomAnchor.constraint(equalTo: tableView.topAnchor),
+            topUnderlineView.bottomAnchor.constraint(equalTo: mainTableView.topAnchor),
             topUnderlineView.widthAnchor.constraint(equalTo: view.widthAnchor),
             topUnderlineView.heightAnchor.constraint(equalToConstant: 1),
             
@@ -166,7 +167,6 @@ class MainViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         setBookmark()
         fetchWorkers()
-        tableView.reloadData()
     }
     
     //MARK: Data request
@@ -199,8 +199,8 @@ class MainViewController: UIViewController {
                     print(error)
                 }
                 self.collectionview.reloadData()
-                self.tableView.reloadData()
-                self.tableView.tableFooterView?.isHidden = true
+                self.mainTableView.reloadData()
+                self.mainTableView.tableFooterView?.isHidden = true
             }
         }
     }
@@ -272,7 +272,8 @@ class MainViewController: UIViewController {
         vc.modalPresentationStyle = .overCurrentContext
         vc.buttomSheet = buttomSheet
         
-        self.present(vc, animated: false)
+         
+        self.present(vc, animated: true, completion: nil)
     }
     
 }
@@ -309,6 +310,16 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: Constants.gradietCellId, for: indexPath) as! GradienTableViewCell
             return cell
         }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard loadingAccess else { return }
+        let detail = DetailViewController()
+        detail.modalPresentationStyle = .fullScreen
+        detail.workerData = isFiltering ? filteredWorkers[indexPath.row] : workers[indexPath.row]
+        let cell = tableView.cellForRow(at: indexPath) as! WorkerTableViewCell
+        detail.logoImage = cell.workerImage.image
+        self.present(detail, animated:true, completion: nil)
     }
     
 }

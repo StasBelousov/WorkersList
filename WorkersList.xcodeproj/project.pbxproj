@@ -13,6 +13,12 @@
 		194A4208272DBEA300A6CD98 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194A4207272DBEA300A6CD98 /* AppDelegate.swift */; };
 		194A420C272DBEA300A6CD98 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194A420B272DBEA300A6CD98 /* MainViewController.swift */; };
 		194A4211272DBEA600A6CD98 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 194A4210272DBEA600A6CD98 /* Assets.xcassets */; };
+		194AF00D2B37327600BE194C /* WorkerListApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194AF00C2B37327600BE194C /* WorkerListApp.swift */; };
+		194AF00F2B37327600BE194C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194AF00E2B37327600BE194C /* ContentView.swift */; };
+		194AF0112B37327700BE194C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 194AF0102B37327700BE194C /* Assets.xcassets */; };
+		194AF0142B37327700BE194C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 194AF0132B37327700BE194C /* Preview Assets.xcassets */; };
+		194AF01A2B37363C00BE194C /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194AF0192B37363C00BE194C /* Note.swift */; };
+		194AF01E2B383B8600BE194C /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194AF01D2B383B8600BE194C /* DetailView.swift */; };
 		19621CA62739C814005288D0 /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 19621CA02739C752005288D0 /* Inter-Medium.ttf */; };
 		19621CA72739C817005288D0 /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 19621CA42739C752005288D0 /* Inter-Regular.ttf */; };
 		199BBF1C273C81ED00FF9773 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 199BBF1B273C81ED00FF9773 /* Constants.swift */; };
@@ -45,6 +51,13 @@
 		194A420B272DBEA300A6CD98 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		194A4210272DBEA600A6CD98 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		194A4215272DBEA600A6CD98 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		194AF00A2B37327600BE194C /* WorkerList Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "WorkerList Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		194AF00C2B37327600BE194C /* WorkerListApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkerListApp.swift; sourceTree = "<group>"; };
+		194AF00E2B37327600BE194C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		194AF0102B37327700BE194C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		194AF0132B37327700BE194C /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		194AF0192B37363C00BE194C /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
+		194AF01D2B383B8600BE194C /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
 		19621C9D2739C751005288D0 /* Inter-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Black.ttf"; sourceTree = "<group>"; };
 		19621C9E2739C751005288D0 /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-SemiBold.ttf"; sourceTree = "<group>"; };
 		19621C9F2739C752005288D0 /* Inter-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Thin.ttf"; sourceTree = "<group>"; };
@@ -82,6 +95,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		194AF0072B37327600BE194C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -89,6 +109,7 @@
 			isa = PBXGroup;
 			children = (
 				194A4206272DBEA300A6CD98 /* WorkersList */,
+				194AF00B2B37327600BE194C /* WorkerList Watch App */,
 				194A4205272DBEA300A6CD98 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -97,6 +118,7 @@
 			isa = PBXGroup;
 			children = (
 				194A4204272DBEA300A6CD98 /* WorkersList.app */,
+				194AF00A2B37327600BE194C /* WorkerList Watch App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -113,6 +135,43 @@
 				19B893B8272F2557000825E1 /* Extensions */,
 			);
 			path = WorkersList;
+			sourceTree = "<group>";
+		};
+		194AF00B2B37327600BE194C /* WorkerList Watch App */ = {
+			isa = PBXGroup;
+			children = (
+				194AF01C2B37364D00BE194C /* Model */,
+				194AF00C2B37327600BE194C /* WorkerListApp.swift */,
+				194AF0182B37361000BE194C /* View */,
+				194AF0102B37327700BE194C /* Assets.xcassets */,
+				194AF0122B37327700BE194C /* Preview Content */,
+			);
+			path = "WorkerList Watch App";
+			sourceTree = "<group>";
+		};
+		194AF0122B37327700BE194C /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				194AF0132B37327700BE194C /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		194AF0182B37361000BE194C /* View */ = {
+			isa = PBXGroup;
+			children = (
+				194AF00E2B37327600BE194C /* ContentView.swift */,
+				194AF01D2B383B8600BE194C /* DetailView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		194AF01C2B37364D00BE194C /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				194AF0192B37363C00BE194C /* Note.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		19621C9C2739C750005288D0 /* Font */ = {
@@ -258,17 +317,37 @@
 			productReference = 194A4204272DBEA300A6CD98 /* WorkersList.app */;
 			productType = "com.apple.product-type.application";
 		};
+		194AF0092B37327600BE194C /* WorkerList Watch App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 194AF0172B37327700BE194C /* Build configuration list for PBXNativeTarget "WorkerList Watch App" */;
+			buildPhases = (
+				194AF0062B37327600BE194C /* Sources */,
+				194AF0072B37327600BE194C /* Frameworks */,
+				194AF0082B37327600BE194C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "WorkerList Watch App";
+			productName = "WorkerList Watch App";
+			productReference = 194AF00A2B37327600BE194C /* WorkerList Watch App.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		194A41FC272DBEA300A6CD98 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1250;
+				LastSwiftUpdateCheck = 1430;
 				LastUpgradeCheck = 1250;
 				TargetAttributes = {
 					194A4203272DBEA300A6CD98 = {
 						CreatedOnToolsVersion = 12.5;
+					};
+					194AF0092B37327600BE194C = {
+						CreatedOnToolsVersion = 14.3;
 					};
 				};
 			};
@@ -286,6 +365,7 @@
 			projectRoot = "";
 			targets = (
 				194A4203272DBEA300A6CD98 /* WorkersList */,
+				194AF0092B37327600BE194C /* WorkerList Watch App */,
 			);
 		};
 /* End PBXProject section */
@@ -301,6 +381,15 @@
 				19621CA62739C814005288D0 /* Inter-Medium.ttf in Resources */,
 				19621CA72739C817005288D0 /* Inter-Regular.ttf in Resources */,
 				194A4211272DBEA600A6CD98 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		194AF0082B37327600BE194C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				194AF0142B37327700BE194C /* Preview Assets.xcassets in Resources */,
+				194AF0112B37327700BE194C /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -332,6 +421,17 @@
 				199BBF1C273C81ED00FF9773 /* Constants.swift in Sources */,
 				19A85A5D27419D76009CF354 /* Date+Extension.swift in Sources */,
 				19A85A57274025AC009CF354 /* CAGradientLayer+Extensions.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		194AF0062B37327600BE194C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				194AF00F2B37327600BE194C /* ContentView.swift in Sources */,
+				194AF01E2B383B8600BE194C /* DetailView.swift in Sources */,
+				194AF00D2B37327600BE194C /* WorkerListApp.swift in Sources */,
+				194AF01A2B37363C00BE194C /* Note.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -494,6 +594,68 @@
 			};
 			name = Release;
 		};
+		194AF0152B37327700BE194C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"WorkerList Watch App/Preview Content\"";
+				DEVELOPMENT_TEAM = LTYW28W757;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = WorkerList;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = .watchkitappWorkersList;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 9.4;
+			};
+			name = Debug;
+		};
+		194AF0162B37327700BE194C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"WorkerList Watch App/Preview Content\"";
+				DEVELOPMENT_TEAM = LTYW28W757;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = WorkerList;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = .watchkitappWorkersList;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 9.4;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -511,6 +673,15 @@
 			buildConfigurations = (
 				194A4219272DBEA600A6CD98 /* Debug */,
 				194A421A272DBEA600A6CD98 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		194AF0172B37327700BE194C /* Build configuration list for PBXNativeTarget "WorkerList Watch App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				194AF0152B37327700BE194C /* Debug */,
+				194AF0162B37327700BE194C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
